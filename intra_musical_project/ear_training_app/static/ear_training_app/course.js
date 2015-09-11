@@ -11,24 +11,38 @@ var EP = {
         topNoteOctave: 0,
         bottomNoteName: "",
         bottomNoteOctave: 0,
+        result: ""
     },
     course: {
         allExercises: [],
         remainingExercises: [],
-        //number of exercises that the student(user) has touched (Django StudentExercise object created for each)
-        studentExercises: [],
         //total number of exercises in course
         numExercises: function() {
             return EP.course.allExercises.length;
         },
-        numStudentExercises: function() {
-            return EP.course.studentExercises.length;
-        }
     }
 }
 
 function showCourseResultsDialogue() {
     showCCDialogue(); //in dialogue.js
+}
+
+function saveExerciseResult(event) {
+    if (EP.currentExercise.answerGiven) {
+      if(event.target.innerHTML === EP.currentExercise.intervalName) {
+          EP.currentExercise.result = "correct";
+      }
+      else {
+          EP.currentExercise.result = "incorrect";
+      }
+    }
+    else {
+        EP.currentExercise.result = "skipped";
+    }
+
+    if (EP.currentExercise.answerGiven) {
+        showExerciseResult(event);
+    }
 }
 
 function saveResult (event) {
@@ -38,9 +52,8 @@ function saveResult (event) {
     request.onload = function () {
         responseData = JSON.parse(this.responseText);
         if (EP.currentExercise.answerGiven) {
-            showResult(event);
+            showExerciseResult(event);
         }
-        apiAllStudentExercises(); //for debugging purposes and resuming course from previous point
     }
     request.open('POST', '/courses/intervals/exercises/save-student-exercise/');
     formdata.append("exercise_id", EP.currentExercise.id);
@@ -58,11 +71,12 @@ function saveResult (event) {
     request.send(formdata);
 }
 
-function showResult(event){
+function showExerciseResult(event){
     //console.log(event.target.innerHTML);
     var result = document.getElementById("answer-result");
     var correctAnswer = document.getElementById("correct-answer");
     if(result.innerHTML === ""){
+        // TODO: get class-based style working in ear_training.css (separate CSS and JS as much as possible)
         // event.target.classList.add("pushed-button");
         var s = event.target.style;
         s.border = "3px solid yellow";
@@ -81,7 +95,6 @@ function showResult(event){
 
 function makeExercisesFromData(data) {
     var numButtons = Math.min(data.length, 4);
-    console.log("numButtons:" + numButtons);
     if(data) {
         EP.course.allExercises = data;
         EP.course.remainingExercises = EP.course.allExercises;
@@ -90,7 +103,6 @@ function makeExercisesFromData(data) {
         console.log("No JSON data");
         return false;
     }
-    apiAllStudentExercises();
     setRandomIntervalExercise();
     createAnswerButtons(numButtons);
     updateAnswerButtonText();
@@ -120,6 +132,9 @@ function updateProgressCounter() {
     if (currentCount < totalExercisesCount) {
         current.innerHTML = currentCount + 1;
     }
+    else {
+        showCCDialogue();
+    }
 }
 
 function setRandomIntervalExercise() {
@@ -148,6 +163,7 @@ function setRandomIntervalExercise() {
 
 function resetStylesAndSound() {
       //reset styles that have changed
+      //TODO: change to class-based style in ear_training.css
       var result = document.getElementById("answer-result");
       result.innerHTML = "";
       var answerBtns = document.getElementsByClassName("answer-button");
@@ -157,11 +173,13 @@ function resetStylesAndSound() {
               answerBtns[i].style.background = "linear-gradient(to bottom, #E38900, #C06600)";
               answerBtns[i].style.border = "none";
           }
-          // This would be a better way. Keep CSS out of JS
+          //IDEA: This would be a better way. Keep CSS out of JS
           // if (answerBtns[i].classList.contains("pushed-button")){
           //     answerBtns[i].classList.remove("pushed-button");
+          //     answerBtns[i].classList.add("unpushed-button")
           // }
       }
+      //TODO IDEA: add radio buttons for sound type
       //set sound quality
       tones.type = "sine";
       tones.release = 150;
@@ -176,7 +194,6 @@ function createAnswerButtons(numButtonLimit) {
     }
 }
 
-//TODO: add parameter for course name to make it more generic
 function updateAnswerButtonText() {
     var exercises = EP.course.allExercises.slice();
     var answerBtns = document.getElementsByClassName("answer-button");
@@ -197,7 +214,7 @@ function updateAnswerButtonText() {
 
 function doAnswer(event) {
     EP.currentExercise.answerGiven = true;
-    saveResult(event);
+    saveExerciseResult(event);
 }
 
 function apiAllStudentExercises() {
@@ -243,14 +260,8 @@ function setupNextButtonListener() {
 }
 
 function goToNextExercise(e) {
-    if(EP.course.numStudentExercises() > EP.course.numExercises()) {
-        alert("error: numStudentExercises greater than numExercises!");
-    }
-    if(EP.course.numStudentExercises() === EP.course.numExercises()) {
-        showCourseResultsDialogue();
-    }
     if(!EP.currentExercise.answerGiven) {
-        saveResult(e);
+        saveExerciseResult(e); //passes click event for "Next Exercise" (rather than answer button)
     }
     setRandomIntervalExercise();
     updateAnswerButtonText();
