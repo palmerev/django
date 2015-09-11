@@ -90,10 +90,8 @@ class CourseType(models.Model):
         return str(self.title)
 
 class Course(models.Model):
-    ''' Page showing a list of all exercises in a course. '''
     course_type = models.ForeignKey(CourseType, blank=True, null=True)
     num_exercises = models.PositiveSmallIntegerField(default=10, null=True)
-    #exercises = models.ForeignKey(Exercise, null=True, blank=True)
 
     def __unicode__(self): #__str__ in python3
         return "course on " + str(self.course_type)
@@ -148,9 +146,7 @@ class StudentExercise(models.Model):
 class CourseStats(models.Model):
     student = models.ForeignKey(Student)
     course = models.ForeignKey(Course)
-    #Boolean
-    course_complete = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
-    exercises_complete = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
+    course_complete = models.BooleanField(default=False)
 
     def __unicode__(self): #__str__ in python3
         return "CourseStats for " + str(self.course)
