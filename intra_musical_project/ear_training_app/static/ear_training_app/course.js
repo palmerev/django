@@ -217,20 +217,6 @@ function doAnswer(event) {
     saveExerciseResult(event);
 }
 
-function apiAllStudentExercises() {
-    var request = new XMLHttpRequest();
-    request.onload = function (e) {
-        var se = JSON.parse(e.target.responseText);
-        console.log("remainingExercises:");
-        console.log(EP.course.remainingExercises);
-        console.log("api student exercises: ");
-        console.log(se);
-        EP.course.studentExercises = se;
-    }
-    request.open("GET", "/api/all-student-exercises/", true);
-    request.send();
-}
-
 function setupPlayButtonListeners() {
     var topButton = document.getElementById("top-note-button");
     var bottomButton = document.getElementById("bottom-note-button");
