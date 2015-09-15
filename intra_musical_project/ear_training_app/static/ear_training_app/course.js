@@ -97,7 +97,7 @@ function makeExercisesFromData(data) {
     var numButtons = Math.min(data.length, 4);
     if(data) {
         EP.course.allExercises = data;
-        EP.course.remainingExercises = EP.course.allExercises;
+        EP.course.remainingExercises = EP.course.allExercises.slice();
     }
     else {
         console.log("No JSON data");
