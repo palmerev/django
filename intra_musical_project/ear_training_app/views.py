@@ -173,8 +173,8 @@ def interval_selection(request):
         return JsonResponse({ "data": interval_data })
 
 def to_interval_names(html_names):
-'''converts HTML-style names ("foo-bar") for intervals to capitalized full names
-of intervals, in the form "Foo bar"'''
+    '''converts HTML-style names ("foo-bar") for intervals to capitalized full names
+    of intervals, in the form "Foo bar"'''
     i_names = []
     for name in html_names:
         if name.startswith("min") or name.startswith("maj"):
@@ -187,7 +187,7 @@ of intervals, in the form "Foo bar"'''
     return i_names
 
 def construct_interval_exercises(ex_list):
-'''Takes a list of Exercise objects and expands them into a list of
+    '''Takes a list of Exercise objects and expands them into a list of
     dicts/objects that is valid JSON.'''
     data = [
         {
