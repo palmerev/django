@@ -135,6 +135,7 @@ function updateProgressCounter() {
     }
     else {
         showCCDialogue();
+        // saveCourseCompletion();
     }
 }
 
@@ -197,15 +198,22 @@ function createAnswerButtons(numButtonLimit) {
 
 function updateAnswerButtonText() {
     var exercises = EP.course.allExercises.slice();
+    console.log("updateAnswerButtonText::exercises: ")
+    console.log(exercises);
     var answerBtns = document.getElementsByClassName("answer-button");
     var numButtons = answerBtns.length;
     var answerText = EP.currentExercise.intervalName;
     var answerIndex = getObjectIndexByProperty("interval_name", answerText, exercises);
     var correctAnswer = exercises.splice(answerIndex, 1)[0];
+    console.log("exercises w/o correctAnswer:");
+    console.log(exercises);
     var newOptions = [];
     var incorrectAnswers = randomSample(numButtons - 1, exercises);
+    console.log("updateAnswerButtonText::incorrectAnswers: ")
+    console.log(incorrectAnswers);
     //add answer to list of new options
     newOptions = incorrectAnswers.concat([correctAnswer]);
+    console.log(newOptions);
     inPlaceShuffle(newOptions);
     for (var i = 0; i < answerBtns.length; i++) {
         var current = answerBtns[i];
@@ -284,9 +292,9 @@ function getCourseExercises() {
     var request = new XMLHttpRequest();
     request.onload = function() {
         console.log("It worked!");
-        var text = JSON.parse(this.responseText);
-        console.log(text);
-        makeExercisesFromData(text.data);
+        var exercises = JSON.parse(this.responseText);
+        console.log(exercises);
+        makeExercisesFromData(exercises.data);
     }
     var data = new FormData();
     data.append("html_names", checkedIds);
@@ -300,6 +308,7 @@ function confirmSIDialogue() {
         hideSIDialogue();
     }
 }
+
 function showSelectionDialogue() {
     // TODO: modify getCourseExercises to confirm selection and send selected names to Django
     var siGrayout = document.getElementById("si-grayout");
