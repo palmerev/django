@@ -253,6 +253,12 @@ function goToNextExercise(e) {
     updateAnswerButtonText();
     resetStylesAndSound();
     updateProgressCounter();
+    var nextButton = document.getElementById("next");
+    var current = parseInt(document.getElementById("current").innerHTML)
+    var courseTotal = parseInt(document.getElementById("course-total").innerHTML)
+    if(current === courseTotal) {
+        nextButton.innerHTML = "Get results";
+    }
     //TODO: figure out where to put this. Maybe "goToNextExercise"?
     // EP.course.remainingExercises.splice(EP.currentExercise.answerIndex, 1);
     var answerIndex = getObjectIndexByProperty(
