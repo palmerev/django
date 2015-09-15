@@ -15,6 +15,10 @@ function randomSample(n, arr) {
     var list = arr.slice();
     for (var i = 0; i < n; i++) {
         var count = list.length;
+        if (!(count > 0)) {
+            console.log("error: attempted to sample from array of length zero.");
+            return selected;
+        }
         var index = parseInt(Math.random() * count);
         var item = list.splice(index, 1)[0];
         selected.push(item);
