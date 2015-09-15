@@ -10,7 +10,7 @@
         var totalIncorrect = 0;
         var totalSkipped = 0;
         for (var i = 0; i < resultsObj.length; i++){
-            switch(resultsObj[i]["exercise_result"]){
+            switch(resultsObj[i]["result"]){
               case "correct":
                 totalCorrect++;
                 break;
@@ -34,8 +34,8 @@
 
     function showCCDialogue() {
         console.log("SHOWING!");
-        var courseResults = EP.course.studentExercises;
-        var overallResults = makeOverallResults(courseResults);
+        var courseResults = EP.course.allExercises;
+        makeOverallResults(courseResults);
         document.getElementById("cc-grayout").classList.remove("hidden");
         document.getElementById("cc-dialogue").classList.remove("hidden");
     }
