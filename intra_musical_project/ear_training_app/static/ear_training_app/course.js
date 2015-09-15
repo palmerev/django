@@ -15,6 +15,7 @@ var EP = {
     },
     course: {
         allExercises: [],
+        completedExercises: [],
         remainingExercises: [],
         //total number of exercises in course
         numExercises: function() {
@@ -39,7 +40,7 @@ function saveExerciseResult(event) {
     else {
         EP.currentExercise.result = "skipped";
     }
-
+    EP.course.completedExercises.push(EP.currentExercise);
     if (EP.currentExercise.answerGiven) {
         showExerciseResult(event);
     }
