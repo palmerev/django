@@ -79,9 +79,10 @@ function showExerciseResult(event){
     if(result.innerHTML === ""){
         // TODO: get class-based style working in ear_training.css (separate CSS and JS as much as possible)
         // event.target.classList.add("pushed-button");
-        var s = event.target.style;
-        s.border = "3px solid yellow";
-        s.background = "blue";
+        // var s = event.target.style;
+        // s.border = "3px solid yellow";
+        // s.background = "blue";
+        event.target.classList.add("pushed-button");
             if (event.target.innerHTML === EP.currentExercise.intervalName) {
             result.style.color = "blue";
             result.innerHTML = "Correct!";
@@ -170,15 +171,15 @@ function resetStylesAndSound() {
       result.innerHTML = "";
       var answerBtns = document.getElementsByClassName("answer-button");
       for (var i = 0; i < answerBtns.length; i++) {
-          if (answerBtns[i].hasAttribute("style")) {
-              // console.log(answerBtns[i].innerHTML);
-              answerBtns[i].style.background = "linear-gradient(to bottom, #E38900, #C06600)";
-              answerBtns[i].style.border = "none";
-          }
           //IDEA: This would be a better way. Keep CSS out of JS
-          // if (answerBtns[i].classList.contains("pushed-button")){
-          //     answerBtns[i].classList.remove("pushed-button");
-          //     answerBtns[i].classList.add("unpushed-button")
+          if (answerBtns[i].classList.contains("pushed-button")){
+              answerBtns[i].classList.remove("pushed-button");
+              // answerBtns[i].classList.add("unpushed-button")
+          }
+          // if (answerBtns[i].hasAttribute("style")) {
+          //     // console.log(answerBtns[i].innerHTML);
+          //     answerBtns[i].style.background = "linear-gradient(to bottom, #E38900, #C06600)";
+          //     answerBtns[i].style.border = "none";
           // }
       }
       //TODO IDEA: add radio buttons for sound type
